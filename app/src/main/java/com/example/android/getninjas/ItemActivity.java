@@ -7,6 +7,8 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -31,13 +33,14 @@ public class ItemActivity extends AppCompatActivity {
         setTitle("Oferta");
         setContentView(R.layout.item_activity);
 
-        TextView txt = (TextView) findViewById(R.id.item_title);
+        TextView itemTitle = (TextView) findViewById(R.id.item_title);
 
         long distance;
         int lead_price;
         String title;
-        ArrayList<String> questions = new ArrayList<>();
-        ArrayList<String> answers = new ArrayList<>();
+        String question;
+        String answer;
+        ArrayList<ItemQA> qa = new ArrayList<>();
         String user_name;
         String user_email;
         ArrayList<String> phones = new ArrayList<>();
@@ -60,8 +63,9 @@ public class ItemActivity extends AppCompatActivity {
 
             // Get all questions
             for(int i = 0; i < info.length(); ++i) {
-                questions.add(info.getJSONObject(i).getString("label"));
-                answers.add(info.getJSONObject(i).getString("value").replace("\"","").replace("[","").replace("]",""));
+                question = info.getJSONObject(i).getString("label");
+                answer = info.getJSONObject(i).getString("value").replace("\"","").replace("[","").replace("]","");
+                qa.add(new ItemQA(question,answer));
             }
 
             user_name = jsonObject.getJSONObject("_embedded").getJSONObject("user").getString("name");
@@ -80,12 +84,18 @@ public class ItemActivity extends AppCompatActivity {
             longitude = jsonObject.getJSONObject("_embedded").getJSONObject("address").getJSONObject("geolocation").getDouble("longitude");
             accept_link = jsonObject.getJSONObject("_links").getJSONObject("accept").getString("href");
             reject_link = jsonObject.getJSONObject("_links").getJSONObject("reject").getString("href");
-            txt.setText(title);
+            itemTitle.setText(title);
+
 
         } catch (InterruptedException | ExecutionException | JSONException e) {
             e.printStackTrace();
         }
 
+        ListView listView = (ListView) findViewById(R.id.questions_list) ;
+
+        ItemAdapter itemAdapter = new ItemAdapter(this, qa);
+
+        listView.setAdapter(itemAdapter);
 
     }
 }
