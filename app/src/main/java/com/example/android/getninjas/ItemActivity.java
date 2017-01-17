@@ -28,11 +28,22 @@ public class ItemActivity extends AppCompatActivity {
 
         TextView txt = (TextView) findViewById(R.id.distance);
 
+        String infoString;
         try {
             String jsonString = new JSONHandler(uri).execute().get();
             JSONObject jsonObject = new JSONObject(jsonString);
-            JSONArray info = jsonObject.getJSONArray("info");
-            txt.setText(Integer.toString(jsonObject.getInt("distance")));
+            JSONArray info = jsonObject.getJSONObject("_embedded").getJSONArray("info");
+            infoString = Integer.toString(jsonObject.getInt("distance")) + "\n";
+            infoString += Integer.toString(jsonObject.getInt("lead_price")) + "\n";
+            infoString += jsonObject.getString("title") + "\n";
+
+            int count = 0;
+            while (count < info.length()){
+                infoString += info.getJSONObject(count).getString("label") + "\n";
+                infoString += info.getJSONObject(count).getString("value").replace("\"","").replace("[","").replace("]","") + "\n";
+                count++;
+            }
+            txt.setText(infoString);
 
         } catch (InterruptedException | ExecutionException | JSONException e) {
             e.printStackTrace();

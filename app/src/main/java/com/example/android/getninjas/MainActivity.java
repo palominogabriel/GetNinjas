@@ -17,7 +17,7 @@ import org.json.JSONObject;
 
 import java.util.concurrent.ExecutionException;
 
-// Android application for the intern position on getNinjas.
+// Android application for the intern position at getNinjas.
 
 public class MainActivity extends AppCompatActivity {
 
