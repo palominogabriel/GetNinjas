@@ -1,15 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#2196F3"
     >
 
-    <TextView
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/distance"
-        android:textSize="15dp"
-        android:text="Distancia"/>
+        android:layout_margin="16dp"
+        android:background="@drawable/item_rectangle">
 
-</LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="25dp"
+            android:id="@+id/item_title"
+            android:textAppearance="?android:textAppearanceLarge"
+            android:textStyle="bold"
+            android:textColor="#000000"
+            android:text="Title"/>
+
+        <TextView
+            android:id="@+id/item_dashed_divider"
+            android:layout_marginLeft="26dp"
+            android:layout_marginRight="26dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/dashed_line"
+            android:layout_below="@id/item_title"/>
+
+        <TextView
+            android:id="@+id/item_user_name"
+            android:layout_marginLeft="16dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/item_dashed_divider"
+            android:textAppearance="?android:textAppearanceMedium"
+            android:text="User name"
+            />
+
+        <TextView
+            android:id="@+id/item_address"
+            android:layout_marginLeft="16dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/item_user_name"
+            android:textAppearance="?android:textAppearanceMedium"
+            android:text="Address"
+            />
+
+        <TextView
+            android:id="@+id/item_distance"
+            android:layout_marginLeft="16dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/item_address"
+            android:textAppearance="?android:textAppearanceMedium"
+            android:text="Distance"
+            />
+
+        <TextView
+            android:id="@+id/item_dashed_divider2"
+            android:layout_marginLeft="26dp"
+            android:layout_marginRight="26dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/dashed_line"
+            android:layout_below="@id/item_distance"/>
+
+
+    </RelativeLayout>
+
+</RelativeLayout>

@@ -3,13 +3,17 @@ package com.example.android.getninjas;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
+import android.view.MenuItem;
 import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -24,26 +28,59 @@ public class ItemActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         String uri = intent.getStringExtra("offerLink");
+        setTitle("Oferta");
         setContentView(R.layout.item_activity);
 
-        TextView txt = (TextView) findViewById(R.id.distance);
+        TextView txt = (TextView) findViewById(R.id.item_title);
+
+        long distance;
+        int lead_price;
+        String title;
+        ArrayList<String> questions = new ArrayList<>();
+        ArrayList<String> answers = new ArrayList<>();
+        String user_name;
+        String user_email;
+        ArrayList<String> phones = new ArrayList<>();
+        String city;
+        String neighborhood;
+        String uf;
+        Double latitude;
+        Double longitude;
+        String accept_link;
+        String reject_link;
 
         String infoString;
         try {
             String jsonString = new JSONHandler(uri).execute().get();
             JSONObject jsonObject = new JSONObject(jsonString);
             JSONArray info = jsonObject.getJSONObject("_embedded").getJSONArray("info");
-            infoString = Integer.toString(jsonObject.getInt("distance")) + "\n";
-            infoString += Integer.toString(jsonObject.getInt("lead_price")) + "\n";
-            infoString += jsonObject.getString("title") + "\n";
+            distance = jsonObject.getLong("distance");
+            lead_price = jsonObject.getInt("lead_price");
+            title = jsonObject.getString("title");
 
-            int count = 0;
-            while (count < info.length()){
-                infoString += info.getJSONObject(count).getString("label") + "\n";
-                infoString += info.getJSONObject(count).getString("value").replace("\"","").replace("[","").replace("]","") + "\n";
-                count++;
+            // Get all questions
+            for(int i = 0; i < info.length(); ++i) {
+                questions.add(info.getJSONObject(i).getString("label"));
+                answers.add(info.getJSONObject(i).getString("value").replace("\"","").replace("[","").replace("]",""));
             }
-            txt.setText(infoString);
+
+            user_name = jsonObject.getJSONObject("_embedded").getJSONObject("user").getString("name");
+            user_email = jsonObject.getJSONObject("_embedded").getJSONObject("user").getString("email");
+
+            JSONArray ja = jsonObject.getJSONObject("_embedded").getJSONObject("user").getJSONObject("_embedded").getJSONArray("phones");
+            // Get all phones
+            for(int j = 0; j < ja.length(); ++j){
+                phones.add(ja.getJSONObject(j).getString("number"));
+            }
+
+            city = jsonObject.getJSONObject("_embedded").getJSONObject("address").getString("city");
+            neighborhood = jsonObject.getJSONObject("_embedded").getJSONObject("address").getString("neighborhood");
+            uf = jsonObject.getJSONObject("_embedded").getJSONObject("address").getString("uf");
+            latitude = jsonObject.getJSONObject("_embedded").getJSONObject("address").getJSONObject("geolocation").getDouble("latitude");
+            longitude = jsonObject.getJSONObject("_embedded").getJSONObject("address").getJSONObject("geolocation").getDouble("longitude");
+            accept_link = jsonObject.getJSONObject("_links").getJSONObject("accept").getString("href");
+            reject_link = jsonObject.getJSONObject("_links").getJSONObject("reject").getString("href");
+            txt.setText(title);
 
         } catch (InterruptedException | ExecutionException | JSONException e) {
             e.printStackTrace();
